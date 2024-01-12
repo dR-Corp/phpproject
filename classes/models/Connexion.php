@@ -15,6 +15,7 @@ class Connexion
         global $password;
         // Connexion à la base de données en utilisant PDO
         try {
+            echo $password; echo "<br>";
             $this->pdo = new PDO("mysql:host=$host;dbname=$database", $username, $password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
