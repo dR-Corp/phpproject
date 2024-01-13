@@ -1,7 +1,7 @@
 
 <?php
 
-    require_once(__DIR__ . '/../../config/config.php');
+    require_once(__DIR__ . '/../../config/database.php');
     require_once(__DIR__ . '/../../classes/models/Connexion.php');
     require_once(__DIR__ . "/../../classes/dao/educateurDAO.php");
     require_once(__DIR__ . "/../../classes/dao/AdminConnexionDAO.php");

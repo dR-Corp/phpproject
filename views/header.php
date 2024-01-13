@@ -1,5 +1,6 @@
 <?php
-    require_once(__DIR__ . '/../config/config.php');
+
+    require_once(__DIR__ . '/../config/database.php');
     require_once(__DIR__ . '/../classes/models/Connexion.php');
     require_once(__DIR__ . "/../classes/dao/ContactDAO.php");
     require_once(__DIR__ . "/../classes/dao/CategoriesDAO.php");
@@ -23,7 +24,6 @@
     <div class="navbar">
         <a href="#">Accueil</a>
     </div>
-
     <div class="sidebar">
     <a href="/views/licencier_views/show_licencier.php">Licencier</a>
     <a href="/views/educateur_views/show_educateur.php">Educateur</a>

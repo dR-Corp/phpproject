@@ -5,7 +5,7 @@ use Classes\dao\ContactDAO;
 use Classes\models\Connexion;
 use Classes\models\ContactModel;
 
-require_once(__DIR__ . '/../config/config.php');
+require_once(__DIR__ . '/../config/database.php');
 require_once(__DIR__ . '../../classes/models/ContactModel.php');
 require_once(__DIR__ . '../../classes/models/Connexion.php');
 require_once(__DIR__ . '../../classes/dao/ContactDAO.php');

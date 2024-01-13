@@ -8,7 +8,7 @@ use Classes\dao\LicencierDAO;
 use PDO;
 use PDOException;
 
-require_once(__DIR__ . '/../../config/config.php');
+require_once(__DIR__ . '/../../config/database.php');
 require_once(__DIR__ . '/EducationDAO.php');
 require_once(__DIR__ . "/LicencierDAO.php");
 

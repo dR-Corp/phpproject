@@ -9,7 +9,7 @@ use Classes\models\Connexion;
 use Classes\models\ContactModel;
 use Classes\models\LicencierModel;
 
-require_once(__DIR__ . '/../config/config.php');
+require_once(__DIR__ . '/../config/database.php');
 require_once(__DIR__ . '../../classes/models/CategorieModel.php');
 require_once(__DIR__ . '../../classes/models/Connexion.php');
 require_once(__DIR__ . '../../classes/models/LicencierModel.php');

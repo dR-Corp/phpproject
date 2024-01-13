@@ -7,7 +7,7 @@ use Classes\dao\LicencierDAO;
 use Classes\models\Connexion;
 use Classes\models\EducateurModel;
 
-require_once(__DIR__ . '/../config/config.php');
+require_once(__DIR__ . '/../config/database.php');
 require_once(__DIR__ . '/../classes/models/EducateurModel.php');
 require_once(__DIR__ . '/../classes/models/LicencierModel.php');
 require_once(__DIR__ . '/../classes/models/Connexion.php');

@@ -2,7 +2,7 @@
 use Classes\dao\ContactDAO;
 use Classes\models\Connexion;
 use Classes\models\ContactModel;
-require_once("../config/config.php");
+require_once("../config/database.php");
 require_once("../classes/models/Connexion.php");
 require_once("../classes/models/ContactModel.php");
 require_once("../classes/dao/ContactDAO.php");
