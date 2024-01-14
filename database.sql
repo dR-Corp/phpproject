@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Jan 12, 2024 at 09:11 AM
--- Server version: 10.4.10-MariaDB
--- PHP Version: 7.3.12
+-- Hôte : localhost
+-- Généré le : dim. 14 jan. 2024 à 11:31
+-- Version du serveur : 10.4.28-MariaDB
+-- Version de PHP : 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,47 +18,44 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `aline_thomas_project_db`
+-- Base de données : `aline_thomas_project_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `categorie`
+-- Structure de la table `categorie`
 --
 
-DROP TABLE IF EXISTS `categorie`;
-CREATE TABLE IF NOT EXISTS `categorie` (
+CREATE TABLE `categorie` (
   `codeRaccourci` varchar(10) NOT NULL,
-  `nom` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`codeRaccourci`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `nom` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `categorie`
+-- Déchargement des données de la table `categorie`
 --
 
 INSERT INTO `categorie` (`codeRaccourci`, `nom`) VALUES
-('gsttd', 'categorie 2');
+('cat1', 'Catégorie 1'),
+('cat2', 'Catégorie 2');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `contact`
+-- Structure de la table `contact`
 --
 
-DROP TABLE IF EXISTS `contact`;
-CREATE TABLE IF NOT EXISTS `contact` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `contact` (
+  `id` int(11) NOT NULL,
   `nomContact` varchar(255) NOT NULL,
   `prenomContact` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `tel` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
+  `tel` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `contact`
+-- Déchargement des données de la table `contact`
 --
 
 INSERT INTO `contact` (`id`, `nomContact`, `prenomContact`, `email`, `tel`) VALUES
@@ -67,71 +64,135 @@ INSERT INTO `contact` (`id`, `nomContact`, `prenomContact`, `email`, `tel`) VALU
 (56, 'oo', 'oo', 'kk@gmail.com', '090909090'),
 (57, 'oo', 'oo', 'kk@gmail.com', '090909090'),
 (58, 'thomas', 'gufflet', 'aline@gmail.com', '44244344344'),
-(59, 'Farid', 'Salami', 'jhhethh@gmail.com', '0909090909');
+(59, 'Farid', 'Salami', 'jhhethh@gmail.com', '0909090909'),
+(60, 'IVAN', 'KOHL', 'ivan@gmail.com', '99541256'),
+(61, 'LING', 'IYAN', 'iyan@gmail.com', '154785236'),
+(62, 'LING', 'IYAN', 'iyan@gmail.com', '154785236'),
+(63, 'LING', 'IYAN', 'iyan@gmail.com', '154785236'),
+(64, 'LING', 'IYAN', 'iyan@gmail.com', '154785236'),
+(65, 'LING', 'IYAN', 'iyan@gmail.com', '154785236'),
+(66, 'AZIZ', 'IDRISSOU', 'aziz@gmail.com', '98745213'),
+(67, 'AZIZ', 'IDRISSOU', 'aziz@gmail.com', '98745213'),
+(71, 'AZIZ', 'IDRISSOU', 'aziz@gmail.com', '98745213'),
+(72, 'AZIZ', 'IDRISSOUS', 'aziz@gmail.com', '98745213'),
+(73, 'AZIZ', 'IDRISSOU', 'aziz@gmail.com', '98745213'),
+(74, 'AZIZ', 'IDRISSOU', 'aziz@gmail.com', '98745213'),
+(75, 'AZIZ', 'IDRISSOU', 'aziz@gmail.com', '98745213'),
+(76, 'GAMA', 'GAMA', 'gama@gmail.com', '788456552840');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `educateur`
+-- Structure de la table `educateur`
 --
 
-DROP TABLE IF EXISTS `educateur`;
-CREATE TABLE IF NOT EXISTS `educateur` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `educateur` (
+  `id` int(11) NOT NULL,
   `licencie` int(11) DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `mdp` varchar(255) NOT NULL,
-  `estAdmin` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `licencie` (`licencie`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  `estAdmin` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `educateur`
+-- Déchargement des données de la table `educateur`
 --
 
 INSERT INTO `educateur` (`id`, `licencie`, `email`, `mdp`, `estAdmin`) VALUES
-(1, 18, 'alima@gmail.com', 'ggggggggg', 0),
-(3, 18, 'adeola@gmail.com', 'ggtyeyyfu', 1);
+(1, 18, 'alimas@gmail.com', '12345', 1),
+(6, 19, 'aziz@gmail.com', 'deffrgegegs', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `licencier`
+-- Structure de la table `licencier`
 --
 
-DROP TABLE IF EXISTS `licencier`;
-CREATE TABLE IF NOT EXISTS `licencier` (
-  `numeroLicence` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `licencier` (
+  `numeroLicence` int(11) NOT NULL,
   `nomLicencier` varchar(255) DEFAULT NULL,
   `prenomLicencier` varchar(255) DEFAULT NULL,
   `contactID` int(11) DEFAULT NULL,
-  `categorieCodeRaccourci` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`numeroLicence`),
-  KEY `contactID` (`contactID`),
-  KEY `categorieCodeRaccourci` (`categorieCodeRaccourci`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+  `categorieCodeRaccourci` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `licencier`
+-- Déchargement des données de la table `licencier`
 --
 
 INSERT INTO `licencier` (`numeroLicence`, `nomLicencier`, `prenomLicencier`, `contactID`, `categorieCodeRaccourci`) VALUES
-(18, 'aline', 'ndeko', 58, 'gsttd'),
-(19, 'Aline', 'Funmilayo', 59, 'gsttd');
+(18, 'aline', 'ndeko', 58, 'cat2'),
+(19, 'Aline', 'Funmilayo', 59, 'cat2'),
+(23, 'JEAN', 'DOE', 60, 'cat2'),
+(24, 'THA', 'UZI', 61, 'cat2'),
+(29, 'CLAUDE', 'MAIGNAN', 66, 'cat2'),
+(30, 'CLAUDEL', 'MAIGNAN', 67, 'cat2');
 
 --
--- Constraints for dumped tables
+-- Index pour les tables déchargées
 --
 
 --
--- Constraints for table `educateur`
+-- Index pour la table `categorie`
+--
+ALTER TABLE `categorie`
+  ADD PRIMARY KEY (`codeRaccourci`);
+
+--
+-- Index pour la table `contact`
+--
+ALTER TABLE `contact`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `educateur`
+--
+ALTER TABLE `educateur`
+  ADD PRIMARY KEY (`id`) USING BTREE,
+  ADD KEY `licencie` (`licencie`);
+
+--
+-- Index pour la table `licencier`
+--
+ALTER TABLE `licencier`
+  ADD PRIMARY KEY (`numeroLicence`),
+  ADD KEY `contactID` (`contactID`),
+  ADD KEY `categorieCodeRaccourci` (`categorieCodeRaccourci`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
+--
+
+--
+-- AUTO_INCREMENT pour la table `contact`
+--
+ALTER TABLE `contact`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+
+--
+-- AUTO_INCREMENT pour la table `educateur`
+--
+ALTER TABLE `educateur`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT pour la table `licencier`
+--
+ALTER TABLE `licencier`
+  MODIFY `numeroLicence` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+
+--
+-- Contraintes pour les tables déchargées
+--
+
+--
+-- Contraintes pour la table `educateur`
 --
 ALTER TABLE `educateur`
   ADD CONSTRAINT `educateur_ibfk_1` FOREIGN KEY (`licencie`) REFERENCES `licencier` (`numeroLicence`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `licencier`
+-- Contraintes pour la table `licencier`
 --
 ALTER TABLE `licencier`
   ADD CONSTRAINT `fk_categoire_licencier` FOREIGN KEY (`categorieCodeRaccourci`) REFERENCES `categorie` (`codeRaccourci`) ON DELETE CASCADE ON UPDATE CASCADE,
