@@ -6,32 +6,47 @@
     error_reporting(E_ALL);
 
     $host = $_SERVER['HTTP_HOST'];
-    // define('HOST', 'http://'.$host.'/phpproject/');
     define('HOST', 'http://'.$host);
+    // define('HOST', 'http://'.$host.'/phpproject/');
 
     use \classes\Router;    
     
     require_once('config/autoload.php');
+    require_once("config/database.php");
     require_once('routes.php');
     
-    // print_r($_GET);
+    // GESTION DES DROITS D'ACCES
+
+    if($_GET['r'] != "login") unset($_SESSION['error']);
     
-    if(isset($_GET['r'])) {
-        $request = "/".$_GET['r'];
-        $router = new Router($request);
+    if(isset($_GET['r']) && !empty($_GET['r'])) {
+
+        if($_GET['r'] != "home" && $_GET['r'] != "login"  && $_GET['r'] != "log"  && $_GET['r'] != "logout") {
+            if(isset($_SESSION['email']) && !empty($_SESSION['email'])) {
+                $request = "/".$_GET['r'];
+                $router = new Router($request);
+            }
+            else {
+                $_SESSION['info'] = "Connectez vous pour démarrer une nouvelle session !";
+                header('Location: login');
+            }
+        }
+        else {
+            $request = "/".$_GET['r'];
+            $router = new Router($request);
+        }
+        
     }
     else {
-        $request = $redirect = '/home';
+        $request = '/home';
         $router = new Router($request);
-        $router->redirect($redirect, $request);
     }
     
     $router->renderController();
 
-    // header("Location: controllers/HomeController.php");
     // header("Location: controllers/AdminController.php");
-    //erreor reporting
-//init_set('dyspl')
+
+
 ?>
 
 

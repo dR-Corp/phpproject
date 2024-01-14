@@ -2,8 +2,8 @@
 
 namespace Classes\dao;
 
-use Classes\models\CategorieModel;
-use Classes\models\Connexion;
+use classes\models\CategorieModel;
+use classes\models\Connexion;
 use PDO;
 use PDOException;
 
@@ -63,29 +63,36 @@ class CategoriesDAO
             $nom = $category->getNom();
 
             $stmt->execute(array(':codeRaccourci' => $codeRaccourci ,':nom' =>$nom));
+            return true;
 
         } catch (PDOException $e) {
             // GÃ©rer les erreurs d'insertion ici
-            return "erreur" . $e->getMessage();
+            echo  "erreur" . $e->getMessage();
+            return false;
         }
+
     }
 
 
 
     // MÃ©thode pour mettre Ã  jour un contact
     public function update($id, CategorieModel $category) {
+        
         try {
-            $query = "UPDATE contact SET nom = :nom, codeRaccourci = :codeRaccourci WHERE id = $id";
+            $query = "UPDATE categorie SET nom = :nom, codeRaccourci = :codeRaccourci WHERE codeRaccourci = :id";
+            // print_r($query);
+            // exit;
             $stmt = $this->connexion->pdo->prepare($query);
             
             $nom = $category->getNom();
             $codeRaccourci = $category->getCodeRaccourci();
 
-            $t = array(':nom' =>$nom , ':codeRaccourci' => $codeRaccourci);
-            $stmt->execute($t);
+            $t = array(':id' =>$id, ':nom' =>$nom , ':codeRaccourci' => $codeRaccourci);
+            return $stmt->execute($t);
 
         } catch (PDOException $e) {
-            return "false" . $e->getMessage();
+            echo "false" . $e->getMessage();
+            return false;
         }
     }
 

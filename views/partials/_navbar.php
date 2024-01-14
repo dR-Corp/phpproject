@@ -10,20 +10,27 @@
     <ul class="navbar-nav ml-auto">
       <!-- user panel -->
       <li class="nav-item dropdown mr-2">
-        <a class="user-panel d-flex" data-toggle="dropdown">
-            <div class="image">
-                <img src="assets/dist/img/avatar.png" class="img-circle elevation-3 bg-white" alt="DA">
-            </div>
-        </a>
-        <div class="dropdown-menu dropdown-menu dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">
-                <div class="d-block font-weight-bold" style="color: #044687;">Username</div>
-          </span>
-          <div class="dropdown-divider"></div>
-          <a href="/logout" class="dropdown-item">
-            <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+        <?php if(isset($_SESSION['email']) && !empty($_SESSION['email']) ): ?>
+          
+          <a class="user-panel d-flex" data-toggle="dropdown">
+              <div class="image">
+                  <img src="assets/dist/img/avatar.png" class="img-circle elevation-3 bg-white" alt="DA">
+              </div>
           </a>
-        </div>
+          <div class="dropdown-menu dropdown-menu dropdown-menu-right">
+            <span class="dropdown-item dropdown-header">
+              <div class="d-block font-weight-bold" style="color: #044687;"><?= $_SESSION['nom'] . "" . $_SESSION['prenom'] ?></div>
+            </span>
+            <div class="dropdown-divider"></div>
+            <a href="logout" class="dropdown-item">
+              <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+            </a>
+          </div>
+
+        <?php else: ?>
+          <a class="btn bg-white text-dark" href="login">Se connecter</a>
+        <?php endif; ?>
+
       </li>
     </ul>
   </nav>

@@ -3,8 +3,8 @@
 namespace Classes;
 
 /**
- * class view
- * pour appeler les classes
+ * class Error
+ * handle les vue des pages d'erreur
  */
 
  class Error {

@@ -3,13 +3,8 @@
 namespace Classes;
 
 use \classes\Error;
-// use \controllers\{
-//     HomeController,
-//     AdminController,
-//     CategorieController,
-//     ContactController,
-//     EducateurController,
-//     LicencierController};
+use classes\dao\{CategoriesDAO, ContactDAO, LicencierDAO, EducationDAO};
+use classes\models\{Connexion};
 
 /**
  * class Router
@@ -51,7 +46,7 @@ class Router {
         ];
     }
 
-    public function __construct($request) {
+    public function __construct($request = null) {
         $this->request = $request;
         $this->routes = self::$rout;
     }
@@ -102,6 +97,18 @@ class Router {
 
         $matched = false;
 
+        // $licencierDAO = new LicencierDAO(new Connexion);
+        // $categorieDAO = new CategoriesDAO(new Connexion);
+        // $contactDAO = new ContactDAO(new Connexion);
+        // $educateurDAO = new EducationDAO(new Connexion);
+
+        $daos = [
+            "licencierDAO" => new LicencierDAO(new Connexion),
+            "categoriesDAO" => new CategoriesDAO(new Connexion),
+            "contactDAO" => new ContactDAO(new Connexion),
+            "educateurDAO" => new EducationDAO(new Connexion),
+        ];
+
         foreach($this->routes as $route) {
             if(($varsValues = $this->match($route["url"])) !== false) {
                 $matched = true;
@@ -120,7 +127,8 @@ class Router {
                 }
                 $controller = '\\controllers\\' . $route["controller"];
                 $method = $route["method"];
-                $currentController = new $controller();
+                // $currentController = new $controller($licencierDAO, $contactDAO, $categorieDAO);
+                $currentController = new $controller($daos);
                 $currentController->$method($params);
             }
         }
@@ -144,15 +152,12 @@ class Router {
         }
     }
 
-    public function redirect($redirect, $request) {
-        
-        // $host = $_SERVER['HTTP_HOST'];
-        // // define('HOST', 'http://'.$host.'/PTA/');
-        // define('HOST', 'http://'.$host);
-
+    public function redirect($request) {
         if(key_exists($request, $this->routes)) { 
-            header("Location: ".HOST.$redirect);
+            header("Location: ".HOST.$request);
             exit;
         }
     }
+
+
 }

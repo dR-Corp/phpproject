@@ -16,7 +16,7 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
-    
+        <h1>Bienvenue dans l'espace d'accueil</h1>
     </div>
 </section>
 <!-- /.content -->

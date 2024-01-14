@@ -2,42 +2,9 @@
 
 namespace Controllers;
 
-use Classes\dao\CategoriesDAO;
-use Classes\dao\ContactDAO;
-use Classes\dao\LicencierDAO;
-use Classes\models\Connexion;
-use Classes\models\ContactModel;
-use Classes\models\LicencierModel;
+use classes\View;
+use classes\models\{ContactModel, LicencierModel};
 
-require_once(__DIR__ . '/../config/database.php');
-require_once(__DIR__ . '../../classes/models/CategorieModel.php');
-require_once(__DIR__ . '../../classes/models/Connexion.php');
-require_once(__DIR__ . '../../classes/models/LicencierModel.php');
-require_once(__DIR__ . '../../classes/models/ContactModel.php');
-require_once(__DIR__ . '../../classes/dao/CategoriesDAO.php');
-require_once(__DIR__ . '../../classes/dao/ContactDAO.php');
-require_once(__DIR__ . '../../classes/dao/LicencierDAO.php');
-
-$licencierDAO = new LicencierDAO(new Connexion);
-$categorieDAO = new CategoriesDAO(new Connexion);
-$contactDAO = new ContactDAO(new Connexion);
-$controller=new LicencierController($licencierDAO, $contactDAO);
-
-if(isset($_POST['addLicencier']) && $_POST['addLicencier'] === 'Ajouter'){
-    $controller->addLicencier();
-} else if (isset($_GET['numeroLicence']) && isset($_GET['delete']) && $_GET['delete'] === 'supprimer') {
-    $numeroLicence = $_GET['numeroLicence'];
-    $controller->deleteLicencier($numeroLicence);
-    header('Location: LicencierController.php');
-    exit();
-    
-} else if(isset($_POST['modify']) ) {
-    $licencier = $licencierDAO->getByNumeroLicencier($_POST['numeroLicence']);
-    $licencierDAO->update($_POST['numeroLicence']);
-    header('Location: LicencierController.php');
-}else{
-    include(__DIR__ . '/../views/licencier_views/show_licencier.php');
-}
 
 class LicencierController
 {
@@ -45,34 +12,114 @@ class LicencierController
     private $contactDAO;
     private $categorieDAO;
 
-    public function index(){
+    public function __construct(array $daos = []) {
+        $this->licencierDAO = $daos['licencierDAO'];
+        $this->contactDAO = $daos['contactDAO'];
+        $this->categorieDAO = $daos['categoriesDAO'];
+    }
+
+    public function index() {
+
         $licenciers = $this->licencierDAO->getAllLicencier();
+
+        $view = new View('licencier/show');
+        $view->render([
+            "titlePage" => "Licenciers",
+            "licenciers" => $licenciers,
+            "contactDAO" => $this->contactDAO
+        ]);
     }
-    public function __construct(LicencierDAO $licencierDAO = null, ContactDAO $contactDAO= null, CategoriesDAO $categorieDAO= null)
-    {
-        $this->licencierDAO = $licencierDAO;
-        $this->contactDAO = $contactDAO;
-        $this->categorieDAO = $categorieDAO;
+
+    public function add() {
+        
+        $categories = $this->categorieDAO->getAllCategories();
+
+        $view = new View('licencier/add');
+        $view->render([
+            "titlePage" => "Ajouter licencier",
+            "categories" => $categories
+        ]);
     }
-    public function addLicencier(){
+
+    public function create() {
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nom = $_POST['nomLicencier'];
-            $prenom = $_POST['prenomLicencier'];
-            $nomc = $_POST['nomc'];
-            $prenomc = $_POST['prenomc'];
-            $email = $_POST['email'];
-            $tel = $_POST['tel'];
-            $category = $_POST['categorieCodeRaccourci'];
+            $nom = htmlentities(nl2br($_POST['nomLicencier']));
+            $prenom = htmlentities(nl2br($_POST['prenomLicencier']));
+            $nomc = htmlentities(nl2br($_POST['nomc']));
+            $prenomc = htmlentities(nl2br($_POST['prenomc']));
+            $email = htmlentities(nl2br($_POST['email']));
+            $tel = htmlentities(nl2br($_POST['tel']));
+            $category = htmlentities(nl2br($_POST['categorieCodeRaccourci']));
             $this->contactDAO->create(new ContactModel($nomc, $prenomc, $email, $tel));
             $licencie = new LicencierModel(0,$nom, $prenom, $this->contactDAO->getLastId(), $category);
             $isLicencie = $this->licencierDAO->create($licencie);
             if ($isLicencie) {
-                header('Location: LicencierController.php');
-                exit();
+                header("Location: licencier");
             } 
         }
-        include(__DIR__ .'/../views/licencier_views/add_licencier.php');
+
+    }
+
+    public function edit($params) {
+
+        $categories = $this->categorieDAO->getAllCategories();
+        $licencier = $this->licencierDAO->getByNumeroLicencier($params["id"]);
+        $contact = $this->contactDAO->getById($licencier['contactID']);
+
+        $view = new View('licencier/edit');
+        $view->render([
+            "titlePage" => "Modifier licencier",
+            "licencier" => $licencier,
+            "categories" => $categories,
+            "contact" => $contact
+        ]);
+    }
+
+    public function update($params) {
+        extract($params);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $this->contactDAO->update($contactID);
+            $isLicencie = $this->licencierDAO->update($id);
+
+            if ($isLicencie) {
+                header("Location: licencier");
+            } 
+        }
+    }
+
+    public function delete($params) {
+        $numeroLicence = $params["id"];
+        $contactID = $params["contactID"];
+        $this->licencierDAO->deleteByNumeroLicencier($numeroLicence);
+        $this->contactDAO->deleteById($contactID);
+        header("Location: licencier");
+    }
+
+    public function indexLicencier() {
+        $licenciers = $this->licencierDAO->getAllLicencier();
+    }
+
+    public function addLicencier(){
+
+        // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        //     $nom = $_POST['nomLicencier'];
+        //     $prenom = $_POST['prenomLicencier'];
+        //     $nomc = $_POST['nomc'];
+        //     $prenomc = $_POST['prenomc'];
+        //     $email = $_POST['email'];
+        //     $tel = $_POST['tel'];
+        //     $category = $_POST['categorieCodeRaccourci'];
+        //     $this->contactDAO->create(new ContactModel($nomc, $prenomc, $email, $tel));
+        //     $licencie = new LicencierModel(0,$nom, $prenom, $this->contactDAO->getLastId(), $category);
+        //     $isLicencie = $this->licencierDAO->create($licencie);
+        //     if ($isLicencie) {
+        //         header('Location: LicencierController.php');
+        //         exit();
+        //     } 
+        // }
+        // include(__DIR__ .'/../views/licencier_views/add_licencier.php');
     }
 
     public function deleteLicencier($numeroLicence) {

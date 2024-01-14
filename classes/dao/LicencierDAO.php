@@ -2,8 +2,7 @@
 
 namespace Classes\dao;
 
-use Classes\models\Connexion;
-use Classes\models\LicencierModel;
+use classes\models\{Connexion, LicencierModel};
 use PDO;
 use PDOException;
 
@@ -11,9 +10,11 @@ use PDOException;
 class LicencierDAO
 {
     private $connexion;
+
     public function __construct(Connexion $connexion) {
         $this->connexion = $connexion;
     }
+    
     public function create(LicencierModel $licence) {
         try {
             $stmt = $this->connexion->pdo->prepare("INSERT INTO licencier (nomLicencier, prenomLicencier, contactID, categorieCodeRaccourci) VALUES (?, ?, ?, ?)");
@@ -26,6 +27,7 @@ class LicencierDAO
 
 
     public function getAllLicencier() {
+        
         try {
             $stmt = $this->connexion->pdo->query("SELECT * FROM licencier");
             $licences = [];
@@ -35,6 +37,7 @@ class LicencierDAO
             }
             return $licences;
         } catch (PDOException $e) {
+            echo ($e->getMessage()); 
             return [];
         }
     }
@@ -65,19 +68,20 @@ class LicencierDAO
     }  
 
     public function update($numeroLicence) {
+        
         try {
-            $query = "UPDATE licencier SET nomLicencier = :nomLicencier, prenomLicencier = :prenomLicencier, contactID = :contactID, categorieCodeRaccourci =:categorieCodeRaccourci WHERE numeroLicence = :numeroLicence";
+            $query = "UPDATE licencier SET nomLicencier = :nomLicencier, prenomLicencier = :prenomLicencier, categorieCodeRaccourci =:categorieCodeRaccourci WHERE numeroLicence = :numeroLicence";
             $stmt = $this->connexion->pdo->prepare($query);
 
             $stmt->bindParam(':numeroLicence', $numeroLicence, PDO::PARAM_INT);
             $stmt->bindParam(':nomLicencier', $_POST['nomLicencier']); 
-            $stmt->bindParam(':prenomLicencier', $_POST['prenomLicencier']); 
-            $stmt->bindParam(':contactID  ', $_POST['contactID']); 
-            $stmt->bindParam(':categorieCodeRaccourci ', $_POST['categorieCodeRaccourci']); 
-            $stmt->execute();
+            $stmt->bindParam(':prenomLicencier', $_POST['prenomLicencier']);
+            $stmt->bindParam(':categorieCodeRaccourci', $_POST['categorieCodeRaccourci']); 
+            
+            return $stmt->execute();
 
         } catch (PDOException $e) {
-            return "false" . $e->getMessage();
+            echo "false" . $e->getMessage();
         }
     }
 }

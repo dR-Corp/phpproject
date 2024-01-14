@@ -3,11 +3,11 @@
 namespace Classes;
 
 /**
- * class view
- * * handle les vue des pages
+ * class Login
+ * handle les vue de la page de connexion
  */
 
- class View {
+ class Login {
 
     protected $pageContent;
     
@@ -23,7 +23,7 @@ namespace Classes;
 
         extract($params);
 
-        include_once('views/layout.php');
+        include_once('views/admin/connexion.php');
 
     }
     

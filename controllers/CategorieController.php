@@ -1,39 +1,80 @@
 <?php
 
 namespace Controllers;
-use Classes\dao\CategoriesDAO;
-use Classes\models\CategorieModel;
-use Classes\models\Connexion;
 
-require_once(__DIR__ . '/../config/database.php');
-require_once(__DIR__ . '../../classes/models/CategorieModel.php');
-require_once(__DIR__ . '../../classes/models/Connexion.php');
-require_once(__DIR__ . '../../classes/dao/CategoriesDAO.php');
-
-$categoriesDAO = new CategoriesDAO(new Connexion);
-$controllerCate=new CategorieController($categoriesDAO);
-
-if(isset($_POST['add']) && $_POST['add'] === 'Ajouter'){
-    
-    $controllerCate->addCategory();
-} else if (isset($_GET['codeRaccourci']) && $_GET['delete'] === 'supprimer') {
-    $codeRaccourci = $_GET['codeRaccourci'];
-    $controllerCate->deleteCategory($codeRaccourci);
-    header('Location: CategorieController.php');
-    exit();
-}else {
-    include(__DIR__ . '/../views/categories_views/add_category.php');
-}
+use classes\View;
+use classes\models\CategorieModel;
 
 class CategorieController
 {
     protected $categoriesDAO;
-    public function __construct(CategoriesDAO $categoriesDAO ){
-        $this->categoriesDAO = $categoriesDAO;
+
+    public function __construct(array $daos = []) {
+        $this->categoriesDAO = $daos['categoriesDAO'];
     }
 
-    public function index(){
+    public function index() {
+
         $categories = $this->categoriesDAO->getAllCategories();
+
+        $view = new View('categorie/show');
+        $view->render([
+            "titlePage" => "Catégories",
+            "categories" => $categories
+        ]);
+    }
+
+    public function add() {
+
+        $view = new View('categorie/add');
+        $view->render([
+            "titlePage" => "Ajouter catégorie",
+        ]);
+    }
+
+    public function create() {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nom = $_POST['nom'];
+            $codeRaccourci = $_POST['codeRaccourci'];
+            $newcategory = $this->categoriesDAO->create(new CategorieModel($codeRaccourci,$nom));
+            if ($newcategory) {
+                header('Location: categorie');
+            }
+        }
+
+    }
+
+    public function edit($params) {
+
+        $categorie = $this->categoriesDAO->getByCodeRaccourci($params["id"]);
+
+        $view = new View('categorie/edit');
+        $view->render([
+            "titlePage" => "Modifier catégorie",
+            "categorie" => $categorie,
+        ]);
+    }
+
+    public function update($params) {
+        extract($params);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $nom = $_POST['nom'];
+            $codeRaccourci = $_POST['codeRaccourci'];
+
+            $newcategory = $this->categoriesDAO->update($id , new CategorieModel($codeRaccourci,$nom));
+
+            if ($newcategory) {
+                header("Location: categorie");
+            } 
+        }
+    }
+
+    public function delete($params) {
+        $id = $params["id"];
+        $this->categoriesDAO->deleteById($id);
+        header("Location: categorie");
     }
 
     public function addCategory() {

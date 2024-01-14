@@ -23,6 +23,17 @@ class LicencierModel
         $this->categorie = $categorie;
     }
 
+    // La fonction n'a pas été utilisée
+    public function hydrate(array $donnees)
+    {
+        foreach ($donnees as $attribut => $valeur) {
+            $methode = 'set' . ucfirst($attribut);
+            if (is_callable(array($this, $methode))) {
+                $this->$methode($valeur);
+            }
+        }
+    }
+
     // Getters
     public function getNumeroLicence() {
         return $this->numeroLicence;

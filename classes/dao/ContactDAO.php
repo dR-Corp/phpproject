@@ -2,8 +2,8 @@
 
 namespace Classes\dao;
 
-use Classes\models\Connexion;
-use Classes\models\ContactModel;
+use classes\models\Connexion;
+use classes\models\ContactModel;
 use PDO;
 use PDOException;
 
@@ -79,8 +79,9 @@ class ContactDAO{
 
     // MÃ©thode pour mettre Ã  jour un contact
     public function update($id) {
+        
         try {
-            $query = "UPDATE contact SET nomc = :nomc, prenomc = :prenomc, email = :email, tel = :tel WHERE id = :id";
+            $query = "UPDATE contact SET nomContact = :nomc, prenomContact = :prenomc, email = :email, tel = :tel WHERE id = :id";
             $stmt = $this->connexion->pdo->prepare($query);
     
             // Utilisez les valeurs directement à partir du tableau $_POST ou $_GET
@@ -93,8 +94,9 @@ class ContactDAO{
             $stmt->execute();
     
         } catch (PDOException $e) {
-            return "false" . $e->getMessage();
+            echo  "false" . $e->getMessage();
         }
+        
     }
     
 
@@ -108,9 +110,10 @@ class ContactDAO{
             
         } catch (PDOException $e) {
             // GÃ©rer les erreurs de suppression ici
-            return 'false' . $e->getMessage();
+            echo 'false' . $e->getMessage();
         }
     }
+
     public function getLastId() {
         try {
             return $this->connexion->pdo->lastInsertId();

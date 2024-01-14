@@ -2,42 +2,88 @@
 
 namespace Controllers;
 
-use Classes\dao\EducationDAO;
-use Classes\dao\LicencierDAO;
-use Classes\models\Connexion;
-use Classes\models\EducateurModel;
-
-require_once(__DIR__ . '/../config/database.php');
-require_once(__DIR__ . '/../classes/models/EducateurModel.php');
-require_once(__DIR__ . '/../classes/models/LicencierModel.php');
-require_once(__DIR__ . '/../classes/models/Connexion.php');
-require_once(__DIR__ . '/../classes/dao/EducationDAO.php');
-require_once(__DIR__ . '/../classes/dao/LicencierDAO.php');
-
-$educateurDAO = new EducationDAO(new Connexion);
-$licencierDAO = new LicencierDAO(new Connexion);
-$controllerEducateur = new EducateurController($educateurDAO , $licencierDAO);
-
-if (isset($_POST['addEducateur']) && $_POST['addEducateur'] === 'Ajouter') {
-    $controllerEducateur->addEducateur();
-} elseif (isset($_GET['id']) && isset($_GET['delete']) && $_GET['delete'] === 'supprimer') {
-    $id = $_GET['id'];
-    $controllerEducateur->deleteEducateurById($id);
-    header('Location: EducateurController.php');
-    exit();
-} else {
-    include(__DIR__ . '/../views/educateur_views/add_educateur.php');
-}
+use classes\View;
+use classes\models\EducateurModel;
 
 class EducateurController
 {
     private $educateurDAO;
     private $licencierDAO;
 
-    public function __construct(EducationDAO $educateurDAO , LicencierDAO $licencierDAO)
-    {
-        $this->educateurDAO = $educateurDAO;
-        $this->licencierDAO = $licencierDAO;
+    public function __construct(array $daos = []) {
+        $this->educateurDAO = $daos['educateurDAO'];
+        $this->licencierDAO = $daos['licencierDAO'];
+    }
+
+    public function index() {
+
+        $educateurs = $this->educateurDAO->getAllEducateur();
+
+        $view = new View('educateur/show');
+        $view->render([
+            "titlePage" => "Educateurs",
+            "educateurs" => $educateurs,
+            "licencierDAO" => $this->licencierDAO
+        ]);
+    }
+
+    public function add() {
+        
+        $licencies = $this->licencierDAO->getAllLicencier();
+
+        $view = new View('educateur/add');
+        $view->render([
+            "titlePage" => "Ajouter éducateur",
+            "licencies" => $licencies
+        ]);
+    }
+
+    public function create() {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $numeroLicencier = htmlentities(nl2br($_POST['licencie']));
+            $email = htmlentities(nl2br($_POST['email']));
+            $mdp = htmlentities(nl2br($_POST['mdp']));
+            $estAdmin = $_POST['estAdmin'] == "on" ? true : false ;
+
+            $newEducateur = $this->educateurDAO->createEducateur(new EducateurModel(0, $numeroLicencier, $email, $mdp , $estAdmin));
+            
+            if ($newEducateur) {
+                header("Location: educateur");
+            }
+        }
+
+    }
+
+    public function edit($params) {
+
+        $licencies = $this->licencierDAO->getAllLicencier();
+        $educateur = $this->educateurDAO->getById($params["id"]);
+
+        $view = new View('educateur/edit');
+        $view->render([
+            "titlePage" => "Modifier educateur",
+            "educateur" => $educateur,
+            "licencies" => $licencies,
+        ]);
+    }
+
+    public function update($params) {
+        extract($params);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
+            $isEducateur = $this->educateurDAO->update($id);
+
+            if ($isEducateur) {
+                header("Location: educateur");
+            } 
+        }
+    }
+
+    public function delete($params) {
+        $id = $params["id"];
+        $this->educateurDAO->deleteById($id);
+        header("Location: educateur");
     }
 
     public function addEducateur()
