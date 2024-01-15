@@ -1,2 +1,0 @@
-18  a@gmail.com  tttttt  on 
-SQLSTATE[22007]: Invalid datetime format: 1366 Incorrect integer value: 'on' for column `aline_thomas_project_db`.`educateur`.`estAdmin` at row 1
