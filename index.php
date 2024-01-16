@@ -14,14 +14,14 @@
     require_once('config/autoload.php');
     require_once("config/database.php");
     require_once('routes.php');
-    
-    // GESTION DES DROITS D'ACCES
 
-    if($_GET['r'] != "login") unset($_SESSION['error']);
+    if($_GET['r'] != "login")
+        unset($_SESSION['error']);
     
     if(isset($_GET['r']) && !empty($_GET['r'])) {
 
-        if($_GET['r'] != "home" && $_GET['r'] != "login"  && $_GET['r'] != "log"  && $_GET['r'] != "logout") {
+        if($_GET['r'] != "home" && $_GET['r'] != "login" && $_GET['r'] != "log" && $_GET['r'] != "logout") {
+
             if(isset($_SESSION['email']) && !empty($_SESSION['email'])) {
                 $request = "/".$_GET['r'];
                 $router = new Router($request);
@@ -43,9 +43,6 @@
     }
     
     $router->renderController();
-
-    // header("Location: controllers/AdminController.php");
-
 
 ?>
 

@@ -3,8 +3,9 @@
 namespace Classes;
 
 use \classes\Error;
-use classes\dao\{CategoriesDAO, ContactDAO, LicencierDAO, EducationDAO};
+use InvalidArgumentException;
 use classes\models\{Connexion};
+use classes\dao\{CategoriesDAO, ContactDAO, LicencierDAO, EducationDAO};
 
 /**
  * class Router
@@ -17,6 +18,11 @@ class Router {
 
     private static $rout = [];
     private $routes = [];
+
+    public function __construct($request = null) {
+        $this->request = $request;
+        $this->routes = self::$rout;
+    }
 
     public function routes() {
         return $this->routes;
@@ -35,8 +41,7 @@ class Router {
         // $vars correspond aux noms des variables présent dans l'url
         if(!is_string($url) || empty($url) || !is_string($controller) || empty($controller) || !is_string($method) || empty($method)) {
             // ce controllers ne doit pas concerner $vars
-            echo "Les arguments doivent tous êtres des chaînes de caractères non vides !";
-            // throw new InvalidArgumentException("Les arguments doivent tous êtres des chaînes de caractères non vides !", 1);
+            throw new InvalidArgumentException("Les arguments doivent tous êtres des chaînes de caractères non vides !", 1);
         }
         self::$rout[] = [
             "url" => $url,
@@ -44,11 +49,6 @@ class Router {
             "method" => $method,
             "vars" => $vars
         ];
-    }
-
-    public function __construct($request = null) {
-        $this->request = $request;
-        $this->routes = self::$rout;
     }
 
     // public function getRoute() {
@@ -96,11 +96,6 @@ class Router {
     public function renderController() {
 
         $matched = false;
-
-        // $licencierDAO = new LicencierDAO(new Connexion);
-        // $categorieDAO = new CategoriesDAO(new Connexion);
-        // $contactDAO = new ContactDAO(new Connexion);
-        // $educateurDAO = new EducationDAO(new Connexion);
 
         $daos = [
             "licencierDAO" => new LicencierDAO(new Connexion),
@@ -158,6 +153,5 @@ class Router {
             exit;
         }
     }
-
 
 }
