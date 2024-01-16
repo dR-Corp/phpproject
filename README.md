@@ -2,19 +2,16 @@
 
 ## Architecture du projet
 
-/assets/
-
-/classes/
-
-/config/
-
-/controllers/
-
-/views/
-
-/index.php
-
-/routes.php
+```
+📦 
+├─ /assets/
+├─ /classes/
+├─ /config/
+├─ /controllers/
+├─ /views/ 
+├─ /index.php
+└─ /routes.php
+```
 
 ## Description des fichiers et dossiers
 
